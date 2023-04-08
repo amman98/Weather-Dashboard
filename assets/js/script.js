@@ -1,12 +1,10 @@
-var buttonEl = document.querySelector("#submit");
+var buttonEl = document.querySelector("#submit"); // Search button element
 
 var apiKey = "af74b68dab1264f074d3adc9cad2c136"; // api key generated under my account
 
-var iconURL = "http://openweathermap.org/img/w/10d.png";
-
 // function that grabs 5-day forecast and displays it to page
 function getData(event) {
-    //event.preventDefault();
+    // name of city user inputted
     var inputEl = document.querySelector("#cityName");
     // pass city as parameter into API call
     var cityURL = "https://api.openweathermap.org/data/2.5/weather?q=" + inputEl.value + "&appid=" + apiKey;
@@ -15,7 +13,7 @@ function getData(event) {
     var lat;
     var lon;
 
-    // use this fetch to grab latitude and longitude values
+    // use this fetch to grab latitude and longitude values of specified city
     fetch(cityURL)
         .then(function (response) {
             if(response.status === 404) {
@@ -45,8 +43,8 @@ function getData(event) {
                     for(var i = 7; i < data.list.length; i = i + 8) {
                         // get date
                         var h3El = document.querySelector("#date-" + day);
-                        h3El.textContent = data.list[i].dt_txt.split(" ")[0];
-                        
+                        h3El.textContent = dayjs(data.list[i].dt_txt.split(" ")[0]).format("M/D/YYYY"); // display date in mm/dd/yyyy format
+
                         // get icon
                         var imgEl = document.querySelector("#icon-" + day);
                         imgEl.setAttribute("src", "http://openweathermap.org/img/w/" + data.list[i].weather[0].icon + ".png");
