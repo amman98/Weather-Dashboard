@@ -1,0 +1,1 @@
+var apiKey = "af74b68dab1264f074d3adc9cad2c136"; // api key generated under my account
