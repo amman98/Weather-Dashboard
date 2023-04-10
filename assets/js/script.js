@@ -88,7 +88,7 @@ function getData(event) {
                     currentH3.textContent = inputEl + " " + dayjs().format("M/D/YYYY");
 
                     var currentImg = document.querySelector("#icon-today");
-                    currentImg.setAttribute("src", "http://openweathermap.org/img/w/" + data.list[0].weather[0].icon + ".png");
+                    currentImg.setAttribute("src", "https://openweathermap.org/img/w/" + data.list[0].weather[0].icon + ".png");
 
                     var currentTmp = document.querySelector("#temp-today");
                     var temp = data.list[0].main.temp;
@@ -117,7 +117,7 @@ function getData(event) {
 
                         // get icon
                         var imgEl = document.querySelector("#icon-" + day);
-                        imgEl.setAttribute("src", "http://openweathermap.org/img/w/" + data.list[i].weather[0].icon + ".png");
+                        imgEl.setAttribute("src", "https://openweathermap.org/img/w/" + data.list[i].weather[0].icon + ".png");
                         
                         // get temperature
                         var tempEl = document.querySelector("#temp-" + day);
