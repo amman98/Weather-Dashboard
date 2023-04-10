@@ -1,27 +1,25 @@
-var buttonEl = document.querySelector("button"); // Search button element
+var formEl = document.querySelector("#searchCity"); // Search button element
 
 var apiKey = "af74b68dab1264f074d3adc9cad2c136"; // api key generated under my account
 
 // function that grabs 5-day forecast and displays it to page
 function getData(event) {
     event.preventDefault();
-    console.log("we are here");
 
-    var btnEl = event.target;
+    var btn = document.activeElement;
+    var inputEl = ""; // will represent value of our input, whether it comes from search history or text box
 
     // this if/else block checks if the user clicked on a search history button or inputted a new city name
-    if(btnEl.className === "historyButton") {
-        inputEl = btnEl.value;
+    if(btn.className === "historyButton") {
+        inputEl = btn.textContent;
     }
     else {
         // name of city user inputted
-        var inputEl = document.querySelector("#cityName");
+        inputEl = document.querySelector("#cityName").value;
     }
 
-    var queryString = "";
-
     // pass city as parameter into API call
-    var cityURL = "https://api.openweathermap.org/data/2.5/weather?q=" + inputEl.value + "&appid=" + apiKey;
+    var cityURL = "https://api.openweathermap.org/data/2.5/weather?q=" + inputEl + "&appid=" + apiKey;
 
     // latitude and longitude values
     var lat;
@@ -33,7 +31,7 @@ function getData(event) {
             // check if city name is invalid
             if(!response.ok) {
                 console.log("Invalid city name");
-                inputEl.textContent = "";
+                document.querySelector("#cityName").textContent = "";
                 document.location.replace("index.html"); // redirect to same webpage
                 return;
             }
@@ -48,23 +46,22 @@ function getData(event) {
             
             // check if city is already in search history
             for(var i = 0; i < cityList.length; i++) {
-                if(cityList[i].toLowerCase() === inputEl.value.toLowerCase()) {
+                if(cityList[i].toLowerCase() === inputEl.toLowerCase()) {
                     isCityRepresented = true; // found city in search history
                     break;
                 }
             }
 
             if(!isCityRepresented) {
-                cityList.push(inputEl.value); // put city name in list of user searched cities
+                cityList.push(inputEl); // put city name in list of user searched cities
                 localStorage.setItem("cityList", JSON.stringify(cityList));
                 
                 // add a new button to page to represent city in our search history
-                var asideEl = document.querySelector("#searchCity");
-                var buttonEl = document.createElement("button");
-                buttonEl.classList.add("historyButton");
-                buttonEl.textContent = cityList[i];
+                var btnEl = document.createElement("button");
+                btnEl.classList.add("historyButton");
+                btnEl.textContent = cityList[i];
         
-                asideEl.append(buttonEl);
+                formEl.append(btnEl);
             }
 
             return response.json();
@@ -82,7 +79,6 @@ function getData(event) {
                     return response.json();
                 })
                 .then(function (data) {
-                    console.log(data);
                     var day = 1; // keeps track of day in 5-day forecast
                     // display 5-day forecast
                     for(var i = 7; i < data.list.length; i = i + 8) {
@@ -136,19 +132,17 @@ function displaySearchHistory() {
 
     var cityList = JSON.parse(localStorage.getItem("cityList"));
 
-    var asideEl = document.querySelector("#searchCity");
-
     // create a button element for each previously searched city and append to aside element
     for(var i = 0; i < cityList.length; i++) {
-        var buttonEl = document.createElement("button");
-        buttonEl.classList.add("historyButton");
-        buttonEl.textContent = cityList[i];
+        var btnEl = document.createElement("button");
+        btnEl.classList.add("historyButton");
+        btnEl.textContent = cityList[i];
 
-        asideEl.append(buttonEl);
+        formEl.append(btnEl);
     }
 }
 
 displaySearchHistory();
 
 // call on click of 'Search' button
-buttonEl.addEventListener("click", getData);
+formEl.addEventListener("submit", getData);
