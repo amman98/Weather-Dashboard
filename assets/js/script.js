@@ -6,9 +6,10 @@ var apiKey = "af74b68dab1264f074d3adc9cad2c136"; // api key generated under my a
 function getData(event) {
     // name of city user inputted
     var inputEl = document.querySelector("#cityName");
+
     // pass city as parameter into API call
     var cityURL = "https://api.openweathermap.org/data/2.5/weather?q=" + inputEl.value + "&appid=" + apiKey;
-    
+
     // latitude and longitude values
     var lat;
     var lon;
@@ -16,20 +17,43 @@ function getData(event) {
     // use this fetch to grab latitude and longitude values of specified city
     fetch(cityURL)
         .then(function (response) {
+            // check if city name is invalid
             if(response.status === 404) {
-                alert("Invalid city name");
+                console.log("Invalid city name");
                 inputEl.textContent = "";
                 document.location.replace("index.html"); // redirect to same webpage
+                return;
             }
+
+            console.log("we are here");
+            var cityList = JSON.parse(localStorage.getItem("cityList")); // represents array of cities user has searched for
+
+            if(cityList === null) {
+                cityList = []; // set var to an empty array instead of null
+            }
+
+            var isCityRepresented = false;
+            
+            for(var i = 0; i < cityList.length; i++) {
+                if(cityList[i].toLowerCase() === inputEl.value.toLowerCase()) {
+                    isCityRepresented = true;
+                    break;
+                }
+            }
+
+            if(!isCityRepresented) {
+                cityList.push(inputEl.value); // put city name in list of user searched cities
+                localStorage.setItem("cityList", JSON.stringify(cityList));
+            }
+
             return response.json();
         })
         .then(function (data) {
-            console.log("we are here");
             // grab lat and lon values
             lat = data.coord.lat;
             lon = data.coord.lon;
             // create URL that uses lat and lon as values
-            queryURL = "https://api.openweathermap.org/data/2.5/forecast?" + "lat=" + lat +  "&lon=" + lon + "&appid=" + apiKey;
+            var queryURL = "https://api.openweathermap.org/data/2.5/forecast?" + "lat=" + lat +  "&lon=" + lon + "&appid=" + apiKey;
             
             // use this fetch to grab 5-day forecast
             fetch(queryURL)
