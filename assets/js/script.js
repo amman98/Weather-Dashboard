@@ -79,6 +79,29 @@ function getData(event) {
                     return response.json();
                 })
                 .then(function (data) {
+                    // get forecast for current day
+                    var sectionEl = document.querySelector("#forecast-today");
+                    sectionEl.style.border = "solid black 1px";
+
+                    var currentH3 = document.querySelector("#city-date");
+                    currentH3.textContent = inputEl + " " + dayjs().format("M/D/YYYY");
+
+                    var currentImg = document.querySelector("#icon-today");
+                    currentImg.setAttribute("src", "http://openweathermap.org/img/w/" + data.list[0].weather[0].icon + ".png");
+
+                    var currentTmp = document.querySelector("#temp-today");
+                    var temp = data.list[0].main.temp;
+                    temp = convertKelvinToFahrenheit(temp); // get temp in fahrenheit
+                    currentTmp.textContent = "Temp: " + temp + " °F";
+
+                    var currentWind = document.querySelector("#wind-today");
+                    var wind = data.list[0].wind.speed;
+                    wind = convertMetersToMilesPerSecond(wind);
+                    currentWind.textContent = "Wind: " + wind + " MPH";
+
+                    var currentHumid = document.querySelector("#humid-today");
+                    currentHumid.textContent = "Humidity: " + data.list[0].main.humidity + " %";
+
                     var day = 1; // keeps track of day in 5-day forecast
                     // display 5-day forecast
                     for(var i = 7; i < data.list.length; i = i + 8) {
