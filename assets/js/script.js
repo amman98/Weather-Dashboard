@@ -79,10 +79,11 @@ function getData(event) {
                     return response.json();
                 })
                 .then(function (data) {
-                    // get forecast for current day
+                    // add dynamic styling to webpage
                     var sectionEl = document.querySelector("#forecast-today");
                     sectionEl.style.border = "solid black 1px";
 
+                    // get forecast for current day
                     var currentH3 = document.querySelector("#city-date");
                     currentH3.textContent = inputEl + " " + dayjs().format("M/D/YYYY");
 
@@ -105,6 +106,11 @@ function getData(event) {
                     var day = 1; // keeps track of day in 5-day forecast
                     // display 5-day forecast
                     for(var i = 7; i < data.list.length; i = i + 8) {
+                        // add dynamic styling
+                        var forecastEl = document.querySelector("#forecast-" + day);
+                        forecastEl.style.padding = "20px";
+                        forecastEl.style.margin = "5px";
+                        
                         // get date
                         var h3El = document.querySelector("#date-" + day);
                         h3El.textContent = dayjs(data.list[i].dt_txt.split(" ")[0]).format("M/D/YYYY"); // display date in mm/dd/yyyy format

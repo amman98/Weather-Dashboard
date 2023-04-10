@@ -20,10 +20,11 @@ form {
 #submit {
     background-color: blue;
     color: white;
-    margin-bottom: 5px;
+    margin-bottom: 1rem;
 }
 
 #whole-week {
+    margin-left: 1rem;
     display: flex;
     flex-direction: column;
 }
@@ -36,7 +37,7 @@ form {
 }
 
 .forecast {
+    text-align: left;
     background-color: rgba(0, 0, 0);
     color: white;
-    margin: 5px;
 }
