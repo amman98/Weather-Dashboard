@@ -1,11 +1,24 @@
-var buttonEl = document.querySelector("#submit"); // Search button element
+var buttonEl = document.querySelector("button"); // Search button element
 
 var apiKey = "af74b68dab1264f074d3adc9cad2c136"; // api key generated under my account
 
 // function that grabs 5-day forecast and displays it to page
 function getData(event) {
-    // name of city user inputted
-    var inputEl = document.querySelector("#cityName");
+    event.preventDefault();
+    console.log("we are here");
+
+    var btnEl = event.target;
+
+    // this if/else block checks if the user clicked on a search history button or inputted a new city name
+    if(btnEl.className === "historyButton") {
+        inputEl = btnEl.value;
+    }
+    else {
+        // name of city user inputted
+        var inputEl = document.querySelector("#cityName");
+    }
+
+    var queryString = "";
 
     // pass city as parameter into API call
     var cityURL = "https://api.openweathermap.org/data/2.5/weather?q=" + inputEl.value + "&appid=" + apiKey;
@@ -18,14 +31,13 @@ function getData(event) {
     fetch(cityURL)
         .then(function (response) {
             // check if city name is invalid
-            if(response.status === 404) {
+            if(!response.ok) {
                 console.log("Invalid city name");
                 inputEl.textContent = "";
                 document.location.replace("index.html"); // redirect to same webpage
                 return;
             }
 
-            console.log("we are here");
             var cityList = JSON.parse(localStorage.getItem("cityList")); // represents array of cities user has searched for
 
             if(cityList === null) {
@@ -34,9 +46,10 @@ function getData(event) {
 
             var isCityRepresented = false;
             
+            // check if city is already in search history
             for(var i = 0; i < cityList.length; i++) {
                 if(cityList[i].toLowerCase() === inputEl.value.toLowerCase()) {
-                    isCityRepresented = true;
+                    isCityRepresented = true; // found city in search history
                     break;
                 }
             }
@@ -44,6 +57,14 @@ function getData(event) {
             if(!isCityRepresented) {
                 cityList.push(inputEl.value); // put city name in list of user searched cities
                 localStorage.setItem("cityList", JSON.stringify(cityList));
+                
+                // add a new button to page to represent city in our search history
+                var asideEl = document.querySelector("#searchCity");
+                var buttonEl = document.createElement("button");
+                buttonEl.classList.add("historyButton");
+                buttonEl.textContent = cityList[i];
+        
+                asideEl.append(buttonEl);
             }
 
             return response.json();
@@ -106,6 +127,28 @@ function convertMetersToMilesPerSecond(wind) {
     wind = wind * 2.24;
     return Math.round(wind * 100) / 100; // check README for code source
 }
+
+function displaySearchHistory() {
+    // end function call if there is no search history
+    if(localStorage.getItem("cityList") === null) {
+        return;
+    }
+
+    var cityList = JSON.parse(localStorage.getItem("cityList"));
+
+    var asideEl = document.querySelector("#searchCity");
+
+    // create a button element for each previously searched city and append to aside element
+    for(var i = 0; i < cityList.length; i++) {
+        var buttonEl = document.createElement("button");
+        buttonEl.classList.add("historyButton");
+        buttonEl.textContent = cityList[i];
+
+        asideEl.append(buttonEl);
+    }
+}
+
+displaySearchHistory();
 
 // call on click of 'Search' button
 buttonEl.addEventListener("click", getData);
