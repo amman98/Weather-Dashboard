@@ -1,0 +1,35 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: darkblue;
+    text-align: center;
+    color: white;
+}
+
+main {
+    display: flex;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+#submit {
+    background-color: blue;
+    color: white;
+    margin-bottom: 5px;
+}
+
+#weekly-forecast {
+    display: flex;
+}
+
+.forecast {
+    background-color: rgba(0, 0, 0);
+    color: white;
+    margin: 5px;
+}

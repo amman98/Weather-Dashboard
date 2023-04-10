@@ -6,7 +6,7 @@ var apiKey = "af74b68dab1264f074d3adc9cad2c136"; // api key generated under my a
 function getData(event) {
     event.preventDefault();
 
-    var btn = document.activeElement;
+    var btn = document.activeElement; // check README for source code
     var inputEl = ""; // will represent value of our input, whether it comes from search history or text box
 
     // this if/else block checks if the user clicked on a search history button or inputted a new city name
