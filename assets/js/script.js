@@ -57,11 +57,7 @@ function getData(event) {
                 localStorage.setItem("cityList", JSON.stringify(cityList));
                 
                 // add a new button to page to represent city in our search history
-                var btnEl = document.createElement("button");
-                btnEl.classList.add("historyButton");
-                btnEl.textContent = cityList[i];
-        
-                formEl.append(btnEl);
+                createButtonElement(cityList[i]);
             }
 
             return response.json();
@@ -153,6 +149,7 @@ function convertMetersToMilesPerSecond(wind) {
     return Math.round(wind * 100) / 100; // check README for code source
 }
 
+// loads search history on page
 function displaySearchHistory() {
     // end function call if there is no search history
     if(localStorage.getItem("cityList") === null) {
@@ -163,12 +160,18 @@ function displaySearchHistory() {
 
     // create a button element for each previously searched city and append to aside element
     for(var i = 0; i < cityList.length; i++) {
-        var btnEl = document.createElement("button");
-        btnEl.classList.add("historyButton");
-        btnEl.textContent = cityList[i];
-
-        formEl.append(btnEl);
+        createButtonElement(cityList[i]);
     }
+}
+
+// creates a new button element and appends it to our form
+function createButtonElement(cityName) {
+    var btnEl = document.createElement("button");
+    btnEl.classList.add("historyButton");
+    btnEl.style.marginTop = "0.8rem"; // gives buttons some space between them
+    btnEl.textContent = cityName;
+
+    formEl.append(btnEl);
 }
 
 displaySearchHistory();
