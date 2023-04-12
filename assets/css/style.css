@@ -26,9 +26,6 @@ form {
     flex-direction: column;
 }
 
-#forecast-today {
-}
-
 #weekly-forecast {
     display: flex;
     flex-wrap: wrap;
